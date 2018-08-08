@@ -1,0 +1,73 @@
+service: bandituserapi
+
+# Use the serverless-webpack plugin to transpile ES6
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+# serverless-webpack configuration
+# Enable auto-packing of external modules
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: prod
+  region: us-east-1
+  
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+functions:
+  config_user:
+    handler: config_user.main
+    events:
+      - http:
+          path: banditusers
+          method: post
+          cors: true
+          authorizer: aws_iam
+  get_user:
+    handler: get_user.main
+    events:
+      - http:
+          path: banditusers/
+          method: get
+          cors: true
+          authorizer: aws_iam
+  list_users:
+    handler: list_users.main
+    events:
+      - http:
+          path: banditusers
+          method: get
+          cors: true
+          authorizer: aws_iam
+  update_user:
+    handler: update_user.main
+    events:
+      - http:
+          path: banditusers/
+          method: put
+          cors: true
+          authorizer: aws_iam
+  delete_user:
+    handler: delete_user.main
+    events:
+      - http:
+          path: banditusers/
+          method: delete
+          cors: true
+          authorizer: aws_iam

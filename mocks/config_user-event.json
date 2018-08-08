@@ -1,0 +1,8 @@
+{
+  "body": "{\"given_name\":\"Kendrick Shen\",\"photo\":\"kendrick_shen.jpg\"}",
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "USER-SUB-1234"
+    }
+  }
+}
